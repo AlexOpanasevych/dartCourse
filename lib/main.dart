@@ -51,11 +51,13 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
 
   bool isNameValid = true;
-  var validationExpr = RegExp(r'[^А-Я][А-Яа-я]*$');
+  var validationExpr = RegExp(r'^(?<uppercase>[А-ЯЄЇ])(?<rest>[а-яєї]*)$');
   // late String _lastname;
-  var students = List.of({Student.fabric(StudentType.bachelor), Student.fabric(StudentType.master), Student.fabric(StudentType.aspirant)});
+  var students = [Student.fabric(StudentType.bachelor), Student.fabric(StudentType.master)];
+    // , Student.fabric(StudentType.aspirant)];
 
-  final myController = TextEditingController();
+  final List<TextEditingController> myControllers =
+    List.generate(2, (i) => TextEditingController());
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -68,6 +70,9 @@ class _MyHomePageState extends State<MyHomePage> {
     var b = 7;
     var c;
     c ??= a - b;
+    // c ??= a + b;
+
+    Function multiply(var a, var b) {return () => a * b;}
 
     Function outer(){       // внешняя функция
       var n = 5;         // некоторая переменная - лексическое окружение функции inner
@@ -80,14 +85,17 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     Function fn = outer();
-    fn();
+    fn(); // n = 6
+    fn(); // 7
   }
 
   @override
   void dispose() {
     // Clean up the controller when the widget is removed from the widget tree.
     // This also removes the _printLatestValue listener.
-    myController.dispose();
+    for (var con in myControllers) {
+      con.dispose();
+    }
     super.dispose();
   }
 
@@ -134,15 +142,67 @@ class _MyHomePageState extends State<MyHomePage> {
                     height: 20,
                   ),
                   TextFormField(
-                    controller: myController,
+                    controller: myControllers[0],
+                      validator: (String? value) {
+                        if (value == null || value.isEmpty) {
+                          return "Введіть ім'я";
+                        }
+                        var matches = validationExpr.allMatches(value);
+                        if(matches.isEmpty) return "Ім'я починається з великої літери";
+                        for(var match in matches) {
+                          print('Match '  + match.namedGroup('rest')!);
+                          if(match.namedGroup('uppercase')!.isEmpty) {
+                            return "Ім'я починається з великої літери";
+                          }
+                          else if(match.namedGroup('rest') == null) {
+                            return "Будь ласка, правильно введіть своє ім'я";
+                          }
+                        }
+
+                        return null;
+                        // isNameValid = true;
+                        // setState(() {lastname = value;});
+
+                      },
+                    onChanged: (value) {
+                      !_formKey.currentState!.validate();
+                    },
+                    onFieldSubmitted: (value) {
+                      if(!_formKey.currentState!.validate()) {
+                        return;
+                      }
+
+                    },
+                    onEditingComplete: (){
+                      students[0].firstname = myControllers[0].value.text;
+                      print(students[0].lastname);
+                    },
+                    // inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r"^[А-Яа-я]+$"))],
+                    decoration: const InputDecoration(
+                        icon: Icon(Icons.person),
+                        border: OutlineInputBorder(),
+                        labelText: "Ім'я"),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  TextFormField(
+                    controller: myControllers[1],
                     // style: TextStyle(color: isNameValid ? const Color(0x002798f3) : Colors.red,),
                     validator: (String? value) {
                       if (value == null || value.isEmpty) {
                         return "Введіть прізвище";
                       }
-                      if(validationExpr.hasMatch(value)) {
-                        if(value.length == 1) return "Прізвище починається з великої літери";
-                        return "Будь ласка, правильно введіть своє прізвище";
+                      var matches = validationExpr.allMatches(value);
+                      if(matches.isEmpty) return "Прізвище починається з великої літери";
+                      for(var match in matches) {
+                        print('Match '  + match.namedGroup('rest')!);
+                        if(match.namedGroup('uppercase')!.isEmpty) {
+                          return "Прізвище починається з великої літери";
+                        }
+                        else if(match.namedGroup('rest') == null) {
+                          return "Будь ласка, правильно введіть своє прізвище";
+                        }
                       }
 
                       return null;
@@ -160,7 +220,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
                     },
                     onEditingComplete: (){
-                      students[0].lastname = myController.value.text;
+                      students[0].lastname = myControllers[1].value.text;
                       print(students[0].lastname);
                     },
                     // inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r"^[А-Яа-я]+$"))],

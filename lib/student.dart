@@ -16,7 +16,8 @@ abstract class Student {
 
   String get lastname;
   set lastname(String lastname);
-
+  String get firstname;
+  set firstname(String firstname);
   // String get lastname => _lastname;
   //
   // set lastname(String lastname) {
@@ -38,6 +39,15 @@ abstract class Student {
 
 class StudentImpl implements Student {
   late String _lastname;
+  late String _firstname;
+
+  @override
+  String get firstname => _firstname;
+
+  @override
+  set firstname(String firstname) {
+    _firstname = firstname;
+  }
 
   @override
   String get lastname => _lastname;
@@ -46,7 +56,7 @@ class StudentImpl implements Student {
   set lastname(String lastname) => _lastname = lastname;
 
   final int timeOfStudy;
-  StudentImpl(this.timeOfStudy, [this._lastname = '']);
+  StudentImpl(this.timeOfStudy, [this._firstname = '', this._lastname = '']);
 }
 
 class Bachelor extends StudentImpl {
