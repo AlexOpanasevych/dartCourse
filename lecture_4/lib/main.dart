@@ -87,44 +87,18 @@ class HomePageWidgetState extends State<HomePageWidget> {
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
       ),
-      floatingActionButton: FloatingActionButton.small(
-          child: const Icon(Icons.accessible_forward),
-          onPressed: () {
-            print("pressed floating button");
-          }),
+      // floatingActionButton: FloatingActionButton.small(
+      //     child: const Icon(Icons.accessible_forward),
+      //     onPressed: () {
+      //       print("pressed floating button");
+      //     }),
       appBar: AppBar(
         title: const Text('Hero Animation'),
       ),
       body: Column(
-          children: [
+          children: const [
         Center(
-          child: PhotoHero(
-            photo: 'images/IMG_20210622_200114.png',
-            width: 300.0,
-            onTap: () {
-              Navigator.of(context).push(
-                  MaterialPageRoute<void>(builder: (BuildContext context) {
-                return Scaffold(
-                  appBar: AppBar(
-                    title: const Text('Example'),
-                  ),
-                  body: Container(
-                    // Set background to blue to emphasize that it's a new route.
-                    color: Colors.lightBlueAccent,
-                    padding: const EdgeInsets.all(16.0),
-                    alignment: Alignment.topLeft,
-                    child: PhotoHero(
-                      photo: 'images/IMG_20210622_200114.png',
-                      width: 100.0,
-                      onTap: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ),
-                );
-              }));
-            },
-          ),
+          child: null,
         ),
       ]),
       drawer: Drawer(
