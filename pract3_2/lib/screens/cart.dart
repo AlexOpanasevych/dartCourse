@@ -1,7 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_spinbox/material.dart';
-import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 import 'package:pract3_2/models/cart.dart';
+import 'package:pract3_2/models/user.dart';
+import 'package:provider/provider.dart';
+
+import 'login.dart';
+
 
 class MyCart extends StatelessWidget {
   const MyCart({Key? key}) : super(key: key);
@@ -10,7 +17,7 @@ class MyCart extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Cart', style: Theme.of(context).textTheme.headline1),
+        title: Text('Cart', style: Theme.of(context).textTheme.headline3),
         backgroundColor: Colors.blue,
       ),
       body: Container(
@@ -28,6 +35,7 @@ class MyCart extends StatelessWidget {
           ],
         ),
       ),
+
     );
   }
 }
@@ -50,20 +58,18 @@ class _CartList extends StatelessWidget {
           // crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
             SizedBox(
-              width: 120,
-              child: SpinBox(
-                enabled: true,
-                value: cart.items[index].count.toDouble(),
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.number,
-                onChanged: (value) {
-                  cart.setCount(cart.items[index], value.toInt());
-                  print(value);
-                }
-              )
-            ),
+                width: 120,
+                child: SpinBox(
+                    enabled: true,
+                    value: cart.items[index].count.toDouble(),
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                    ),
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) {
+                      cart.setCount(cart.items[index], value.toInt());
+                      print(value);
+                    })),
             IconButton(
               icon: const Icon(Icons.remove_circle_outline),
               onPressed: () {
@@ -84,8 +90,10 @@ class _CartList extends StatelessWidget {
 class _CartTotal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var hugeStyle =
-        Theme.of(context).textTheme.headline1!.copyWith(color: Colors.black, fontSize: 48);
+    var hugeStyle = Theme.of(context)
+        .textTheme
+        .headline1!
+        .copyWith(color: Colors.black, fontSize: 48);
 
     return SizedBox(
       height: 200,
@@ -98,11 +106,19 @@ class _CartTotal extends StatelessWidget {
                     Text('\$${cart.totalPrice}', style: hugeStyle)),
             const SizedBox(width: 24),
             TextButton(
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Buying not supported yet.')));
+              onPressed: () async {
+                // ScaffoldMessenger.of(context).showSnackBar(
+                //     const SnackBar(content: Text('Buying not supported yet.')));
+                var url = Uri.parse('https://jsonplaceholder.typicode.com/todos/1');
+                var response = await http.get(url);
+
+                print('Response status: ${response.statusCode}');
+                print('Response body: ${jsonDecode(response.body)}');
+
+                var result = await Navigator.push(context, MaterialPageRoute<MyLogin>(builder: (context) => const MyLogin(User('admin', 'admin'))));
+                print(result!.user.password);
+                print(result!.user.username);
               },
-              style: TextButton.styleFrom(primary: Colors.white),
               child: const Text('BUY'),
             ),
           ],

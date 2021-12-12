@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:pract3_2/models/user.dart';
 import 'package:provider/provider.dart';
 import 'package:pract3_2/models/cart.dart';
 import 'package:pract3_2/models/catalog.dart';
@@ -22,7 +23,7 @@ void main() {
       child: MaterialApp(
         initialRoute: '/',
         routes: {
-          '/': (context) => const MyLogin(),
+          '/': (context) => const MyLogin(User()),
           '/catalog': (context) => const MyCatalog(),
         },
       ),

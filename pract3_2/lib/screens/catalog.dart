@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pract3_2/common/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:pract3_2/models/cart.dart';
 import 'package:pract3_2/models/catalog.dart';
@@ -18,6 +19,50 @@ class MyCatalog extends StatelessWidget {
                 (context, index) => _MyListItem(index)),
           ),
         ],
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              decoration: const BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Stack(
+                children: <Widget>[
+                  Container(
+                    alignment: Alignment.center,
+                    child: const Text('Example App',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                        )
+                    ),
+                  ),
+                  Align(alignment: Alignment.topRight,
+                    child: FloatingActionButton.small(
+                        child: const Icon(Icons.brightness_6),
+                        onPressed: () {
+                          Provider.of<ThemeProvider>(context, listen: false).swapTheme();
+                        }),
+                  )
+                ],
+              ),
+            ),
+            const ListTile(
+              leading: Icon(Icons.message),
+              title: Text('Messages'),
+            ),
+            const ListTile(
+              leading: Icon(Icons.account_circle),
+              title: Text('Profile'),
+            ),
+            const ListTile(
+              leading: Icon(Icons.settings),
+              title: Text('Settings'),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -60,7 +105,7 @@ class _MyAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      title: Text('Catalog', style: Theme.of(context).textTheme.headline1),
+      title: Text('Catalog', style: Theme.of(context).textTheme.headline3),
       floating: true,
       actions: [
         IconButton(
