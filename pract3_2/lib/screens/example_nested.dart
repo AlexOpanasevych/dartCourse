@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pract3_2/screens/animation_screen.dart';
+import 'package:pract3_2/screens/digram_screen.dart';
 
 class Screen extends StatelessWidget {
   final int index;
@@ -63,14 +65,14 @@ class NestedNavigatorState extends State<NestedNavigator> {
             key: _fstScreen,
             onGenerateRoute: (route) => MaterialPageRoute<Screen>(
               settings: route,
-              builder: (context) => Screen(_currentIndex),
+              builder: (context) => SimpleBarChart.withSampleData(),
             ),
           ),
           Navigator(
             key: _scndScreen,
             onGenerateRoute: (route) => MaterialPageRoute<Screen>(
               settings: route,
-              builder: (context) => Screen(_currentIndex),
+              builder: (context) => const AnimScreen(),
             ),
           ),
           Navigator(

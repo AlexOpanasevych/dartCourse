@@ -117,7 +117,7 @@ class _CartTotal extends StatelessWidget {
 
                 var result = await Navigator.push(context, MaterialPageRoute<MyLogin>(builder: (context) => const MyLogin(User('admin', 'admin'))));
                 print(result!.user.password);
-                print(result!.user.username);
+                print(result.user.username);
               },
               child: const Text('BUY'),
             ),

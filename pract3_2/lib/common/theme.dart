@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeProvider extends ChangeNotifier {
   late ThemeData _selectedTheme = light;
-  late Typography defaultTypography;
+  // late Typography defaultTypography;
   late SharedPreferences prefs;
 
   ThemeData dark = ThemeData.dark().copyWith();
